@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="com.jareddickson.cordova.tag-manager" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>Tag Manager</name>
+    <description>Tag Manager plugin for Cordova</description>
+    <js-module name="TagManager" src="www/TagManager.js">
+        <clobbers target="cordova.plugins.TagManager"/>
+    </js-module>
+    <platform name="android">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="TagManager">
+                <param name="android-package" value="com.jareddickson.cordova.tagmanager.CDVTagManager"/>
+            </feature>
+        </config-file>
+        <config-file parent="/*" target="AndroidManifest.xml">
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.INTERNET" />
+        </config-file>
+        <source-file src="src/android/CDVTagManager.java" target-dir="src/com/jareddickson/cordova/tagmanager"/>
+        <source-file src="src/android/libGoogleAnalyticsServices.jar" target-dir="libs" />
+    </platform>
+    <platform name="ios">
+        <config-file parent="/*" target="config.xml">
+            <feature name="TagManager">
+                <param name="ios-package" value="CDVTagManager"/>
+            </feature>
+        </config-file>
+        <source-file src="src/ios/CDVTagManager.m"/>
+        <source-file src="src/ios/libGoogleAnalyticsServices.a" framework="true" />
+        <header-file src="src/ios/CDVTagManager.h" />
+        <header-file src="src/ios/TAGContainer.h" />
+        <header-file src="src/ios/TAGContainerOpener.h" />
+        <header-file src="src/ios/TAGDataLayer.h" />
+        <header-file src="src/ios/TAGLogger.h" />
+        <header-file src="src/ios/TAGManager.h" />
+
+        <framework src="CoreData.framework" />
+        <framework src="SystemConfiguration.framework" />
+        <framework src="libz.dylib" />
+        <framework src="libsqlite3.dylib" />
+    </platform>
+</plugin>
