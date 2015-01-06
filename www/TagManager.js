@@ -30,8 +30,7 @@
     //
     // category = The event category. This parameter is required to be non-empty.
     // eventAction = The event action. This parameter is required to be non-empty.
-    // eventLabel = The event label. This parameter may be a blank string to indicate no label.
-    // eventLabel = The event label. This parameter may be a blank string to indicate no label.
+    // eventLabel = The event label. This parameter may be a blank string to indicate no label.    
     // eventValue = The event value. This parameter may be -1 to indicate no value.
     TagManager.prototype.trackEvent = function (success, fail, category, eventAction, eventLabel, eventValue) {
         var timestamp = new Date().getTime();
@@ -61,6 +60,7 @@
         });
     };
 
+    // force a dispatch to Tag Manager
     TagManager.prototype.dispatch = function (success, fail) {
         var timestamp = new Date().getTime();
         queue.push({
@@ -71,6 +71,7 @@
         });
     };
 
+    // exit the TagManager instance and stop setInterval
     TagManager.prototype.exit = function (success, fail) {
         var timestamp = new Date().getTime();
         queue.push({
