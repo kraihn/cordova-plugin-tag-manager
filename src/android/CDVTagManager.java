@@ -56,6 +56,9 @@ public class CDVTagManager extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext callback) {
         if (action.equals("initGTM")) {
             try {
+                // Set the dispatch interval
+                GAServiceManager.getInstance().setLocalDispatchPeriod(args.getInt(1));
+                
                 TagManager tagManager = TagManager.getInstance(this.cordova.getActivity().getApplicationContext());
                 ContainerOpener.openContainer(
                         tagManager,                             // TagManager instance.
