@@ -58,7 +58,7 @@ public class CDVTagManager extends CordovaPlugin {
             try {
                 // Set the dispatch interval
                 GAServiceManager.getInstance().setLocalDispatchPeriod(args.getInt(1));
-                
+
                 TagManager tagManager = TagManager.getInstance(this.cordova.getActivity().getApplicationContext());
                 ContainerOpener.openContainer(
                         tagManager,                             // TagManager instance.
@@ -120,6 +120,18 @@ public class CDVTagManager extends CordovaPlugin {
             }
             else {
                 callback.error("trackPage failed - not initialized");
+            }
+        } else if (action.equals("dispatch")) {
+            if (inited) {
+                try {
+                    GAServiceManager.getInstance().dispatchLocalHits();
+                }
+                catch (final Exception e) {
+                    callback.error(e.getMessage());
+                }
+            }
+            else {
+                callback.error("dispatch failed - not initialized");
             }
         }
         return false;

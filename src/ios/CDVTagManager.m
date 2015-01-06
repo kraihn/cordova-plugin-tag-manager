@@ -98,6 +98,18 @@
         [self failWithMessage:@"trackPage failed - not initialized" toID:callbackId withError:nil];
 }
 
+- (void) dispatch:(CDVInvokedUrlCommand*)command
+{
+    NSString            *callbackId = command.callbackId;
+
+    if (inited)
+    {
+        [self.tagManager dispatch];
+    }
+    else
+        [self failWithMessage:@"dispatch failed - not initialized" toID:callbackId withError:nil];
+}
+
 -(void) successWithMessage:(NSString *)message toID:(NSString *)callbackID
 {
     CDVPluginResult *commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:message];

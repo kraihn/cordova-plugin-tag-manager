@@ -30,6 +30,10 @@
         return cordovaRef.exec(success, fail, 'TagManager', 'trackPage', [pageURL]);
     };
 
+    TagManager.prototype.dispatch = function (success, fail) {
+        return cordovaRef.exec(success, fail, 'TagManager', 'dispatch', []);
+    };
+
     TagManager.prototype.exit = function (success, fail) {
         return cordovaRef.exec(success, fail, 'TagManager', 'exitGTM', []);
     };
