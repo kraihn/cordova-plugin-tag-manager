@@ -27,6 +27,7 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaInterface;
 
+import com.google.analytics.tracking.android.GAServiceManager;
 import com.google.tagmanager.Container;
 import com.google.tagmanager.ContainerOpener;
 import com.google.tagmanager.ContainerOpener.OpenType;
