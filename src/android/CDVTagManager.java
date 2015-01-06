@@ -27,6 +27,7 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaInterface;
 
+import com.google.analytics.tracking.android.GAServiceManager;
 import com.google.tagmanager.Container;
 import com.google.tagmanager.ContainerOpener;
 import com.google.tagmanager.ContainerOpener.OpenType;
@@ -56,6 +57,9 @@ public class CDVTagManager extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext callback) {
         if (action.equals("initGTM")) {
             try {
+                // Set the dispatch interval
+                GAServiceManager.getInstance().setLocalDispatchPeriod(args.getInt(1));
+
                 TagManager tagManager = TagManager.getInstance(this.cordova.getActivity().getApplicationContext());
                 ContainerOpener.openContainer(
                         tagManager,                             // TagManager instance.
@@ -117,6 +121,18 @@ public class CDVTagManager extends CordovaPlugin {
             }
             else {
                 callback.error("trackPage failed - not initialized");
+            }
+        } else if (action.equals("dispatch")) {
+            if (inited) {
+                try {
+                    GAServiceManager.getInstance().dispatchLocalHits();
+                }
+                catch (final Exception e) {
+                    callback.error(e.getMessage());
+                }
+            }
+            else {
+                callback.error("dispatch failed - not initialized");
             }
         }
         return false;
