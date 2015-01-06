@@ -1,9 +1,9 @@
 (function () {
     var cordovaRef = window.PhoneGap || window.cordova || window.Cordova;
     var queue = [];
-    var runInterval = 1000;    
-    var running = true;
-    var runner = null;
+    var runInterval = 1000;
+    var running = false;
+    var runner;
 
     function TagManager() {
     }
@@ -13,6 +13,8 @@
     // id = the GTM account ID of the form 'GTM-000000'
     // period = the minimum interval for transmitting tracking events if any exist in the queue
     TagManager.prototype.init = function (success, fail, id, period) {
+        runner = setInterval(run, runInterval);
+        running = true;
         var timestamp = new Date().getTime();
         queue.push({
             timestamp: timestamp,
@@ -22,7 +24,6 @@
             id: id,
             period: period
         });
-        if (!running) runner = setInterval(run, runInterval);
     };
 
     // log an event
@@ -44,24 +45,20 @@
             eventLabel: eventLabel,
             eventValue: eventValue
         });
-        if (!running) runner = setInterval(run, runInterval);
     };
 
     // log a page view
     //
     // pageURL = the URL of the page view
     TagManager.prototype.trackPage = function (success, fail, pageURL) {
-        setTimeout(function() {
-            var timestamp = new Date().getTime();
-            queue.push({
-                timestamp: timestamp,
-                method: 'trackPage',
-                success: success,
-                fail: fail,
-                pageURL: pageURL
-            });
-            if (!running) runner = setInterval(run, runInterval);
-        }, runInterval + 100);
+        var timestamp = new Date().getTime();
+        queue.push({
+            timestamp: timestamp,
+            method: 'trackPage',
+            success: success,
+            fail: fail,
+            pageURL: pageURL
+        });
     };
 
     TagManager.prototype.dispatch = function (success, fail) {
@@ -72,7 +69,6 @@
             success: success,
             fail: fail
         });
-        if (!running) runner = setInterval(run, runInterval);
     };
 
     TagManager.prototype.exit = function (success, fail) {
@@ -82,8 +78,7 @@
             method: 'exitGTM',
             success: success,
             fail: fail
-        });
-        if (!running) runner = setInterval(run, runInterval);
+        });        
     };
 
     if (cordovaRef && cordovaRef.addConstructor) {
@@ -98,12 +93,11 @@
             window.plugins = {};
         }
         if (!window.plugins.TagManager) {
-            window.plugins.TagManager = new TagManager();
+            window.plugins.TagManager = new TagManager();            
         }
     }
 
-    function run() {
-        running = true;
+    function run() {        
         if (queue.length > 0) {
             var item = queue.shift();
             if (item.method === 'initGTM') {
@@ -120,11 +114,9 @@
             }
             else if (item.method === 'exitGTM') {
                 cordovaRef.exec(item.success, item.fail, 'TagManager', item.method, []);
+                clearInterval(runner);
+                running = false;
             }
-        }
-        else {
-            clearInterval(runner);
-            running = false;
         }
     }
 
