@@ -1,0 +1,23 @@
+{
+    "version": "0.1.1",
+    "name": "com.jareddickson.cordova.tag-manager",
+    "cordova_name": "Tag Manager",
+    "description": "Google Tag Manager plugin for analytics tracking with support for events and pageviews.",
+    "license": "MIT",
+    "repo": "https://github.com/kraihn/cordova-plugin-tag-manager.git",
+    "issue": "https://github.com/kraihn/cordova-plugin-tag-manager/issues",
+    "keywords": [
+        "cordova",
+        "tag manager",
+        "google tag manager",
+        "gtm",
+        "analytics",
+        "tracking",
+        "universal analytics"
+    ],
+    "platforms": [
+        "android",
+        "ios"
+    ],
+    "engines": []
+}
