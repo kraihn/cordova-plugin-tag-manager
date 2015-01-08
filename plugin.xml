@@ -3,8 +3,11 @@
         xmlns:android="http://schemas.android.com/apk/res/android">
     <name>Tag Manager</name>
     <description>Google Tag Manager plugin for analytics tracking with support for events and pageviews.</description>
+    <author email="code@jareddickson.com" href="https://github.com/kraihn/cordova-plugin-tag-manager">Jared Dickson</author>
     <license>MIT</license>
     <keywords>cordova,tag manager,google tag manager,gtm,analytics,tracking,universal analytics</keywords>
+    <repo>https://github.com/kraihn/cordova-plugin-tag-manager.git</repo>
+    <issue>https://github.com/kraihn/cordova-plugin-tag-manager/issues</issue>
     <js-module name="TagManager" src="www/TagManager.js">
         <clobbers target="cordova.plugins.TagManager"/>
     </js-module>
