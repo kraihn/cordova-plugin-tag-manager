@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="com.jareddickson.cordova.tag-manager" version="0.1.1" xmlns="http://apache.org/cordova/ns/plugins/1.0"
+<plugin id="com.jareddickson.cordova.tag-manager" version="0.1.2" xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android">
     <name>Tag Manager</name>
     <description>Google Tag Manager plugin for analytics tracking with support for events and pageviews.</description>
     <author email="code@jareddickson.com" href="https://github.com/kraihn/cordova-plugin-tag-manager">Jared Dickson</author>
     <license>MIT</license>
-    <keywords>cordova,tag manager,google tag manager,gtm,analytics,tracking,universal analytics</keywords>
+    <keywords>cordova,tag manager,google tag manager,gtm,analytics,tracking,universal analytics, mobile analytics</keywords>
     <repo>https://github.com/kraihn/cordova-plugin-tag-manager.git</repo>
     <issue>https://github.com/kraihn/cordova-plugin-tag-manager/issues</issue>
     <js-module name="TagManager" src="www/TagManager.js">
