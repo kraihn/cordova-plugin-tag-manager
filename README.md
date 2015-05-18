@@ -26,7 +26,7 @@ When being used in combination with AngularJS, it is recommended to use [Angular
 
 ## TagManager
 
-    var tagManager = new TagManager();
+    var tagManager = cordova.require('com.jareddickson.cordova.tag-manager.TagManager');
 
 ### Methods
 
@@ -60,7 +60,7 @@ Initialize Tag Manager with an account ID and the number of seconds between disp
 ### Quick Example
 
     // Tag Manager
-    var tagManager = new TagManager();
+    var tagManager = cordova.require('com.jareddickson.cordova.tag-manager.TagManager');
     var trackingId = 'GTM-000000';
     var intervalPeriod = 30; // seconds
 
