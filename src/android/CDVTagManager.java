@@ -89,14 +89,13 @@ public class CDVTagManager extends CordovaPlugin {
                 callback.error(e.getMessage());
             }
         } else if (action.equals("trackEvent")) {
-            if(inited) {
+            if (inited) {
                 try {
                     DataLayer dataLayer = TagManager.getInstance(this.cordova.getActivity().getApplicationContext()).getDataLayer();
                     int value = 0;
                     try {
                         value = args.getInt(3);
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                     }
                     dataLayer.push(DataLayer.mapOf("event", "interaction", "target", args.getString(0), "action", args.getString(1), "target-properties", args.getString(2), "value", value));
                     callback.success("trackEvent - category = " + args.getString(0) + "; action = " + args.getString(1) + "; label = " + args.getString(2) + "; value = " + value);
@@ -104,12 +103,11 @@ public class CDVTagManager extends CordovaPlugin {
                 } catch (final Exception e) {
                     callback.error(e.getMessage());
                 }
-            }
-            else {
+            } else {
                 callback.error("trackEvent failed - not initialized");
             }
         } else if (action.equals("trackPage")) {
-            if(inited) {
+            if (inited) {
                 try {
                     DataLayer dataLayer = TagManager.getInstance(this.cordova.getActivity().getApplicationContext()).getDataLayer();
                     dataLayer.push(DataLayer.mapOf("event", "content-view", "content-name", args.get(0)));
@@ -118,20 +116,19 @@ public class CDVTagManager extends CordovaPlugin {
                 } catch (final Exception e) {
                     callback.error(e.getMessage());
                 }
-            }
-            else {
+            } else {
                 callback.error("trackPage failed - not initialized");
             }
         } else if (action.equals("dispatch")) {
             if (inited) {
                 try {
                     GAServiceManager.getInstance().dispatchLocalHits();
-                }
-                catch (final Exception e) {
+                    callback.success("dispatch sent");
+                    return true;
+                } catch (final Exception e) {
                     callback.error(e.getMessage());
                 }
-            }
-            else {
+            } else {
                 callback.error("dispatch failed - not initialized");
             }
         }
