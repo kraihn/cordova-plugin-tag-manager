@@ -110,9 +110,9 @@
             }
             else if (item.method === 'trackPage') {
                 if (item.userId) {
-                    cordovaRef.exec(item.success, item.fail, 'TagManager', item.method, [item.pageURL]);
-                } else {
                     cordovaRef.exec(item.success, item.fail, 'TagManager', item.method, [item.pageURL, item.userId]);
+                } else {
+                    cordovaRef.exec(item.success, item.fail, 'TagManager', item.method, [item.pageURL, null]);
                 }
             }
             else if (item.method === 'dispatch') {
