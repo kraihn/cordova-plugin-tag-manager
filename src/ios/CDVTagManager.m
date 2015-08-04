@@ -103,7 +103,7 @@
 
         if (userId != nil) {
             [dataLayer push:@{@"event": @"content-view",
-                              @"content-name": pageURL
+                              @"content-name": pageURL,
                               @"user-id": userId}];
         } else {
             [dataLayer push:@{@"event": @"content-view",
