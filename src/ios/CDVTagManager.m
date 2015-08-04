@@ -99,13 +99,13 @@
     NSString *userId = [command.arguments objectAtIndex:1];
 
     if (inited) {
-        TAGDataLayer *dataLayer = [TAGManager instance].dataLayer;
-
         if (userId != nil) {
+            TAGDataLayer *dataLayer = [TAGManager instance].dataLayer;
             [dataLayer push:@{@"event": @"content-view",
                               @"content-name": pageURL,
                               @"user-id": userId}];
         } else {
+            TAGDataLayer *dataLayer = [TAGManager instance].dataLayer;
             [dataLayer push:@{@"event": @"content-view",
                               @"content-name": pageURL}];
         }
