@@ -22,17 +22,17 @@
 
 package com.jareddickson.cordova.tagmanager;
 
+import java.util.concurrent.TimeUnit;
+
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaInterface;
 
-import com.google.analytics.tracking.android.GAServiceManager;
-import com.google.tagmanager.Container;
-import com.google.tagmanager.ContainerOpener;
-import com.google.tagmanager.ContainerOpener.OpenType;
-import com.google.tagmanager.DataLayer;
-import com.google.tagmanager.TagManager;
+import com.google.android.gms.tagmanager.*;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,23 +58,30 @@ public class CDVTagManager extends CordovaPlugin {
         if (action.equals("initGTM")) {
             try {
                 // Set the dispatch interval
-                GAServiceManager.getInstance().setLocalDispatchPeriod(args.getInt(1));
+            	GoogleAnalytics.getInstance(this.cordova.getActivity().getApplicationContext()).setLocalDispatchPeriod(args.getInt(1));
 
                 TagManager tagManager = TagManager.getInstance(this.cordova.getActivity().getApplicationContext());
-                ContainerOpener.openContainer(
-                        tagManager,                             // TagManager instance.
-                        args.getString(0),                      // Tag Manager Container ID.
-                        OpenType.PREFER_NON_DEFAULT,            // Prefer not to get the default container, but stale is OK.
-                        null,                                   // Time to wait for saved container to load (ms). Default is 2000ms.
-                        new ContainerOpener.Notifier() {        // Called when container loads.
-                            @Override
-                            public void containerAvailable(Container container) {
-                                // Handle assignment in callback to avoid blocking main thread.
-                                mContainer = container;
-                                inited = true;
-                            }
-                        }
-                );
+//                PendingResult<ContainerHolder> pending = tagManager.loadContainerPreferNonDefault(args.getString(0), R.raw.gtm_default_container);
+                PendingResult<ContainerHolder> pending = tagManager.loadContainerPreferNonDefault(args.getString(0), 0);
+
+             // The onResult method will be called as soon as one of the following happens:
+//              1. a saved container is loaded
+//              2. if there is no saved container, a network container is loaded
+//              3. the request times out. The example below uses a constant to manage the timeout period.
+				 pending.setResultCallback(new ResultCallback<ContainerHolder>() {
+				     @Override
+				     public void onResult(ContainerHolder containerHolder) {
+				         mContainer = containerHolder.getContainer();
+				         if (!containerHolder.getStatus().isSuccess()) {
+				             return;
+				         }
+				         inited = true;
+//				         ContainerHolderSingleton.setContainerHolder(containerHolder);
+//				         ContainerLoadedCallback.registerCallbacksForContainer(container);
+//				         containerHolder.setContainerAvailableListener(new ContainerLoadedCallback());
+				     }
+				 }, 2, TimeUnit.SECONDS);
+
                 callback.success("initGTM - id = " + args.getString(0) + "; interval = " + args.getInt(1) + " seconds");
                 return true;
             } catch (final Exception e) {
@@ -117,7 +124,7 @@ public class CDVTagManager extends CordovaPlugin {
                       callback.error(e.getMessage());
                   }
               } else {
-                  callback.error("trackEvent failed - not initialized");
+                  callback.error("trackCustomEvent failed - not initialized");
               }
         } else if (action.equals("trackPage")) {
             if (inited) {
@@ -135,7 +142,7 @@ public class CDVTagManager extends CordovaPlugin {
         } else if (action.equals("dispatch")) {
             if (inited) {
                 try {
-                    GAServiceManager.getInstance().dispatchLocalHits();
+                    GoogleAnalytics.getInstance(this.cordova.getActivity().getApplicationContext()).dispatchLocalHits();
                     callback.success("dispatch sent");
                     return true;
                 } catch (final Exception e) {

@@ -125,6 +125,9 @@
             else if (item.method === 'trackEvent') {
                 cordovaRef.exec(item.success, item.fail, 'TagManager', item.method, [item.category, item.eventAction, item.eventLabel, item.eventValue]);
             }
+            else if (item.method === 'trackCustomEvent') {
+                cordovaRef.exec(item.success, item.fail, 'TagManager', item.method, [item.eventAction, item.eventLabel, item.eventValue]);
+            }
             else if (item.method === 'trackPage') {
                 cordovaRef.exec(item.success, item.fail, 'TagManager', item.method, [item.pageURL]);
             }
