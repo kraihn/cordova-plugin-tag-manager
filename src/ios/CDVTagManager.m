@@ -89,7 +89,7 @@
     NSString        *callbackId = command.callbackId;
     NSString        *eventAction = [command.arguments objectAtIndex:0];
     NSString        *eventLabel = [command.arguments objectAtIndex:1];
-    NSString        *eventValue = [command.arguments objectAtIndex:2]];
+    NSString        *eventValue = [command.arguments objectAtIndex:2];
 
     if (inited)
     {
