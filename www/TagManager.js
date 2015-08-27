@@ -30,7 +30,7 @@
     //
     // category = The event category. This parameter is required to be non-empty.
     // eventAction = The event action. This parameter is required to be non-empty.
-    // eventLabel = The event label. This parameter may be a blank string to indicate no label.    
+    // eventLabel = The event label. This parameter may be a blank string to indicate no label.
     // eventValue = The event value. This parameter may be -1 to indicate no value.
     TagManager.prototype.trackEvent = function (success, fail, category, eventAction, eventLabel, eventValue) {
         var timestamp = new Date().getTime();
@@ -40,6 +40,24 @@
             success: success,
             fail: fail,
             category: category,
+            eventAction: eventAction,
+            eventLabel: eventLabel,
+            eventValue: eventValue
+        });
+    };
+
+    // log an event with custom label-value
+    //
+    // eventAction = The event action. This parameter is required to be non-empty.
+    // eventLabel = The event label. This parameter may be a blank string to indicate no label.
+    // eventValue = The event value. This parameter may be a blank string to indicate no value.
+    TagManager.prototype.trackCustomEvent = function (success, fail, eventAction, eventLabel, eventValue) {
+        var timestamp = new Date().getTime();
+        queue.push({
+            timestamp: timestamp,
+            method: 'trackCustomEvent',
+            success: success,
+            fail: fail,
             eventAction: eventAction,
             eventLabel: eventLabel,
             eventValue: eventValue
@@ -79,7 +97,7 @@
             method: 'exitGTM',
             success: success,
             fail: fail
-        });        
+        });
     };
 
     if (cordovaRef && cordovaRef.addConstructor) {
@@ -94,11 +112,11 @@
             window.plugins = {};
         }
         if (!window.plugins.TagManager) {
-            window.plugins.TagManager = new TagManager();            
+            window.plugins.TagManager = new TagManager();
         }
     }
 
-    function run() {        
+    function run() {
         if (queue.length > 0) {
             var item = queue.shift();
             if (item.method === 'initGTM') {

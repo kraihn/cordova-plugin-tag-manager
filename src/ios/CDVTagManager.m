@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2014 Jared Dickson
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,17 +28,17 @@
     NSString    *callbackId = command.callbackId;
     NSString    *accountID = [command.arguments objectAtIndex:0];
     NSInteger   dispatchPeriod = [[command.arguments objectAtIndex:1] intValue];
-    
+
     inited = FALSE;
     self.tagManager = [TAGManager instance];
-    
+
     // Modify the log level of the logger to print out not only
     // warning and error messages, but also verbose, debug, info messages.
     [self.tagManager.logger setLogLevel:kTAGLoggerLogLevelVerbose];
-    
+
     // Set the dispatch interval
     self.tagManager.dispatchInterval = dispatchPeriod;
-    
+
     // Open a container.
     [TAGContainerOpener openContainerWithId:accountID
                                  tagManager:self.tagManager
@@ -60,10 +60,10 @@
 -(void) exitGTM:(CDVInvokedUrlCommand*)command
 {
     NSString *callbackId = command.callbackId;
-    
+
     if (inited)
         [self.container close];
-    
+
     [self successWithMessage:@"exitGTM" toID:callbackId];
 }
 
@@ -74,7 +74,7 @@
     NSString        *eventAction = [command.arguments objectAtIndex:1];
     NSString        *eventLabel = [command.arguments objectAtIndex:2];
     NSNumber        *eventValue = [NSNumber numberWithInt:[[command.arguments objectAtIndex:3] intValue]];
-    
+
     if (inited)
     {
         TAGDataLayer *dataLayer = [TAGManager instance].dataLayer;
@@ -84,11 +84,27 @@
         [self failWithMessage:@"trackEvent failed - not initialized" toID:callbackId withError:nil];
 }
 
+- (void) trackCustomEvent:(CDVInvokedUrlCommand*)command
+{
+    NSString        *callbackId = command.callbackId;
+    NSString        *eventAction = [command.arguments objectAtIndex:0];
+    NSString        *eventLabel = [command.arguments objectAtIndex:1];
+    NSString        *eventValue = [command.arguments objectAtIndex:2]];
+
+    if (inited)
+    {
+        TAGDataLayer *dataLayer = [TAGManager instance].dataLayer;
+        [dataLayer push:@{@"event":eventAction, eventLabel:eventValue}];
+    }
+    else
+        [self failWithMessage:@"trackCustomEvent failed - not initialized" toID:callbackId withError:nil];
+}
+
 - (void) trackPage:(CDVInvokedUrlCommand*)command
 {
     NSString            *callbackId = command.callbackId;
     NSString            *pageURL = [command.arguments objectAtIndex:0];
-    
+
     if (inited)
     {
         TAGDataLayer *dataLayer = [TAGManager instance].dataLayer;
@@ -113,7 +129,7 @@
 -(void) successWithMessage:(NSString *)message toID:(NSString *)callbackID
 {
     CDVPluginResult *commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:message];
-    
+
     [self writeJavascript:[commandResult toSuccessCallbackString:callbackID]];
 }
 
@@ -121,7 +137,7 @@
 {
     NSString        *errorMessage = (error) ? [NSString stringWithFormat:@"%@ - %@", message, [error localizedDescription]] : message;
     CDVPluginResult *commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorMessage];
-    
+
     [self writeJavascript:[commandResult toErrorCallbackString:callbackID]];
 }
 
