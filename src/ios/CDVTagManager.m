@@ -77,14 +77,25 @@
     NSString *eventAction = [command.arguments objectAtIndex:1];
     NSString *eventLabel = [command.arguments objectAtIndex:2];
     NSNumber *eventValue = [NSNumber numberWithInt:[[command.arguments objectAtIndex:3] intValue]];
+    NSString *userId = [command.arguments objectAtIndex:4];
 
     if (inited) {
-        TAGDataLayer *dataLayer = [TAGManager instance].dataLayer;
-        [dataLayer push: @{@"event": @"interaction",
-                           @"target": category,
-                           @"action": eventAction,
-                           @"target-properties": eventLabel,
-                           @"value": eventValue}];
+        if (userId != nil) {
+            TAGDataLayer *dataLayer = [TAGManager instance].dataLayer;
+            [dataLayer push: @{@"event": @"interaction",
+                               @"target": category,
+                               @"action": eventAction,
+                               @"target-properties": eventLabel,
+                               @"value": eventValue,
+                               @"user-id": userId}];
+        } else {
+            TAGDataLayer *dataLayer = [TAGManager instance].dataLayer;
+            [dataLayer push: @{@"event": @"interaction",
+                               @"target": category,
+                               @"action": eventAction,
+                               @"target-properties": eventLabel,
+                               @"value": eventValue}];
+        }
     } else {
         [self failWithMessage: @"trackEvent failed - not initialized"
                          toID: callbackId
