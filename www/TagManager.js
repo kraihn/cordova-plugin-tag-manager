@@ -108,7 +108,17 @@
                 cordovaRef.exec(item.success, item.fail, 'TagManager', item.method, [item.id, item.period]);
             }
             else if (item.method === 'trackEvent') {
-                cordovaRef.exec(item.success, item.fail, 'TagManager', item.method, [item.category, item.eventAction, item.eventLabel, item.eventValue]);
+                if (item.userId) {
+                    cordovaRef.exec(
+                        item.success, item.fail, 'TagManager', item.method,
+                        [item.category, item.eventAction, item.eventLabel, item.eventValue, item.userId]
+                    );
+                } else {
+                    cordovaRef.exec(
+                        item.success, item.fail, 'TagManager', item.method,
+                        [item.category, item.eventAction, item.eventLabel, item.eventValue, null]
+                    );
+                }
             }
             else if (item.method === 'trackPage') {
                 if (item.userId) {
