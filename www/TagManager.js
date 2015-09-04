@@ -31,7 +31,8 @@
     // eventAction = The event action. This parameter is required to be non-empty.
     // eventLabel = The event label. This parameter may be a blank string to indicate no label.
     // eventValue = The event value. This parameter may be -1 to indicate no value.
-    TagManager.prototype.trackEvent = function (success, fail, category, eventAction, eventLabel, eventValue) {
+    // userId = The ID of the user to track
+    TagManager.prototype.trackEvent = function (success, fail, category, eventAction, eventLabel, eventValue, userId) {
         var timestamp = new Date().getTime();
         queue.push({
             timestamp: timestamp,
@@ -41,7 +42,8 @@
             category: category,
             eventAction: eventAction,
             eventLabel: eventLabel,
-            eventValue: eventValue
+            eventValue: eventValue,
+            userId: userId
         });
     };
 
@@ -106,7 +108,17 @@
                 cordovaRef.exec(item.success, item.fail, 'TagManager', item.method, [item.id, item.period]);
             }
             else if (item.method === 'trackEvent') {
-                cordovaRef.exec(item.success, item.fail, 'TagManager', item.method, [item.category, item.eventAction, item.eventLabel, item.eventValue]);
+                if (item.userId) {
+                    cordovaRef.exec(
+                        item.success, item.fail, 'TagManager', item.method,
+                        [item.category, item.eventAction, item.eventLabel, item.eventValue, item.userId]
+                    );
+                } else {
+                    cordovaRef.exec(
+                        item.success, item.fail, 'TagManager', item.method,
+                        [item.category, item.eventAction, item.eventLabel, item.eventValue, null]
+                    );
+                }
             }
             else if (item.method === 'trackPage') {
                 if (item.userId) {
