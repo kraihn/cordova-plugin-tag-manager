@@ -32,6 +32,7 @@
         </config-file>
         <source-file src="src/ios/CDVTagManager.m"/>
         <source-file src="src/ios/libGoogleAnalyticsServices.a" framework="true" />
+        <source-file src="src/ios/libAdIdAccess.a" framework="true" />
         <header-file src="src/ios/CDVTagManager.h" />
         <header-file src="src/ios/TAGContainer.h" />
         <header-file src="src/ios/TAGContainerOpener.h" />
@@ -43,5 +44,6 @@
         <framework src="SystemConfiguration.framework" />
         <framework src="libz.dylib" />
         <framework src="libsqlite3.dylib" />
+        <framework src="AdSupport.framework" weak="true" />
     </platform>
 </plugin>
