@@ -5,8 +5,7 @@
     var running = false;
     var runner;
 
-    function TagManager() {
-    }
+    function TagManager() {}
 
     // initialize google analytics with an account ID and the min number of seconds between posting
     //
@@ -30,9 +29,10 @@
     //
     // category = The event category. This parameter is required to be non-empty.
     // eventAction = The event action. This parameter is required to be non-empty.
-    // eventLabel = The event label. This parameter may be a blank string to indicate no label.    
+    // eventLabel = The event label. This parameter may be a blank string to indicate no label.
     // eventValue = The event value. This parameter may be -1 to indicate no value.
-    TagManager.prototype.trackEvent = function (success, fail, category, eventAction, eventLabel, eventValue) {
+    // userId = The ID of the user to track
+    TagManager.prototype.trackEvent = function (success, fail, category, eventAction, eventLabel, eventValue, userId) {
         var timestamp = new Date().getTime();
         queue.push({
             timestamp: timestamp,
@@ -42,21 +42,24 @@
             category: category,
             eventAction: eventAction,
             eventLabel: eventLabel,
-            eventValue: eventValue
+            eventValue: eventValue,
+            userId: userId
         });
     };
 
     // log a page view
     //
     // pageURL = the URL of the page view
-    TagManager.prototype.trackPage = function (success, fail, pageURL) {
+    // userId = the ID of the user to track
+    TagManager.prototype.trackPage = function (success, fail, pageURL, userId) {
         var timestamp = new Date().getTime();
         queue.push({
             timestamp: timestamp,
             method: 'trackPage',
             success: success,
             fail: fail,
-            pageURL: pageURL
+            pageURL: pageURL,
+            userId: userId
         });
     };
 
@@ -79,7 +82,7 @@
             method: 'exitGTM',
             success: success,
             fail: fail
-        });        
+        });
     };
 
     if (cordovaRef && cordovaRef.addConstructor) {
@@ -94,21 +97,35 @@
             window.plugins = {};
         }
         if (!window.plugins.TagManager) {
-            window.plugins.TagManager = new TagManager();            
+            window.plugins.TagManager = new TagManager();
         }
     }
 
-    function run() {        
+    function run() {
         if (queue.length > 0) {
             var item = queue.shift();
             if (item.method === 'initGTM') {
                 cordovaRef.exec(item.success, item.fail, 'TagManager', item.method, [item.id, item.period]);
             }
             else if (item.method === 'trackEvent') {
-                cordovaRef.exec(item.success, item.fail, 'TagManager', item.method, [item.category, item.eventAction, item.eventLabel, item.eventValue]);
+                if (item.userId) {
+                    cordovaRef.exec(
+                        item.success, item.fail, 'TagManager', item.method,
+                        [item.category, item.eventAction, item.eventLabel, item.eventValue, item.userId]
+                    );
+                } else {
+                    cordovaRef.exec(
+                        item.success, item.fail, 'TagManager', item.method,
+                        [item.category, item.eventAction, item.eventLabel, item.eventValue, null]
+                    );
+                }
             }
             else if (item.method === 'trackPage') {
-                cordovaRef.exec(item.success, item.fail, 'TagManager', item.method, [item.pageURL]);
+                if (item.userId) {
+                    cordovaRef.exec(item.success, item.fail, 'TagManager', item.method, [item.pageURL, item.userId]);
+                } else {
+                    cordovaRef.exec(item.success, item.fail, 'TagManager', item.method, [item.pageURL, null]);
+                }
             }
             else if (item.method === 'dispatch') {
                 cordovaRef.exec(item.success, item.fail, 'TagManager', item.method, []);
