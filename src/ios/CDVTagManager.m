@@ -73,7 +73,12 @@
     NSString        *category = [command.arguments objectAtIndex:0];
     NSString        *eventAction = [command.arguments objectAtIndex:1];
     NSString        *eventLabel = [command.arguments objectAtIndex:2];
-    NSNumber        *eventValue = [NSNumber numberWithInt:[[command.arguments objectAtIndex:3] intValue]];
+    NSNumber *eventValue = @0;
+    id valueObject = [command.arguments objectAtIndex:3];
+    if (![valueObject isEqual:[NSNull null]])
+    {
+        eventValue = [NSNumber numberWithInt:[valueObject intValue]];
+    }
     
     if (inited)
     {
