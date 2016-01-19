@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-tag-manager",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "Google Tag Manager plugin for analytics tracking with support for events and pageviews.",
   "cordova": {
     "id": "com.jareddickson.cordova.tag-manager",
