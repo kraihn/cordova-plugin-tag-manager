@@ -38,6 +38,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Iterator;
+
 /**
  * This class echoes a string called from JavaScript.
  */
@@ -106,6 +111,19 @@ public class CDVTagManager extends CordovaPlugin {
             } else {
                 callback.error("trackEvent failed - not initialized");
             }
+        } else if (action.equals("pushEvent")) {
+            if (inited) {
+                try {
+                    DataLayer dataLayer = TagManager.getInstance(this.cordova.getActivity().getApplicationContext()).getDataLayer();
+                    dataLayer.push(objectMap(args.getJSONObject(0)));
+                    callback.success("pushEvent: " + dataLayer.toString());
+                    return true;
+                } catch (final Exception e) {
+                    callback.error(e.getMessage());
+                }
+            } else {
+                callback.error("pushEvent failed - not initialized");
+            }
         } else if (action.equals("trackPage")) {
             if (inited) {
                 try {
@@ -134,4 +152,20 @@ public class CDVTagManager extends CordovaPlugin {
         }
         return false;
     }
+
+    private Map<Object, Object> objectMap(JSONObject o) throws JSONException {
+        if (o.length() == 0) {
+            return Collections.<Object, Object>emptyMap();
+        }
+        Map<Object, Object> map = new HashMap<Object, Object>(o.length());
+        Iterator it = o.keys();
+        Object key;
+        Object value;
+        while (it.hasNext()) {
+            key = it.next();
+            value = o.has(key.toString()) ? o.get(key.toString()): null;
+            map.put(key, value);
+        }
+        return map;
+    }    
 }
