@@ -17,7 +17,7 @@ When being used in combination with AngularJS, it is recommended to use [Angular
 
 ## Installation
 
-    cordova plugin add com.jareddickson.cordova.tag-manager
+    cordova plugin add cordova-plugin-tag-manager
 
 ## Supported Platforms
 
