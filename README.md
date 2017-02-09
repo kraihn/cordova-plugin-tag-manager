@@ -36,6 +36,8 @@ When being used in combination with AngularJS, it is recommended to use [Angular
 
 - `tagManager.trackPage`: Log a page view.
 
+- `tagManager.pushEvent`: Pushes any event onto the Data Layer. This is not only reserved for event types.
+
 - `tagManager.dispatch`: Force an immediate dispatch to Tag Manager.
 
 - `tagManager.exit`: Exit the TagManager instance and stop setInterval.
@@ -127,6 +129,25 @@ Force an immediate dispatch to Tag Manager.
 
     // Dispatch
     tagManager.dispatch();
+
+## tagManager.pushEvent
+
+Pushes any event onto the Data Layer. This is not only reserved for event types.
+
+    tagManager.pushEvent([success], [error], eventData);
+
+### Parameters
+
+- __success__: (Optional) The callback to execute if successful.
+
+- __error__: (Optional) The callback to execute if an error occurs.
+
+- __eventData__: Data that will be pushed onto the Data Layer.
+
+### Quick Example
+
+    // push a variable onto the Data Layer
+    tagManager.pushEvent(success, error, {'variable_name': 'variable_value'});
 
 ## tagManager.exit
 
