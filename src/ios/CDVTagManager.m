@@ -126,6 +126,7 @@
     if (inited)
     {
         [self.tagManager dispatch];
+        [self successWithMessage:@"dispatch" toID:callbackId];
     }
     else
         [self failWithMessage:@"dispatch failed - not initialized" toID:callbackId withError:nil];
