@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="com.jareddickson.cordova.tag-manager" version="0.2.0" xmlns="http://apache.org/cordova/ns/plugins/1.0"
+<plugin id="com.jareddickson.cordova.tag-manager" version="1.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android">
     <name>Tag Manager</name>
     <description>Google Tag Manager plugin for analytics tracking with support for events and pageviews.</description>
@@ -21,23 +21,8 @@
             <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
             <uses-permission android:name="android.permission.INTERNET" />
         </config-file>
-        <config-file parent="application" target="AndroidManifest.xml">
-          <meta-data android:name="com.google.android.gms.version" android:value="26" />
-          <receiver android:enabled="true" android:name="com.google.android.gms.analytics.AnalyticsReceiver">
-              <intent-filter>
-                  <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
-              </intent-filter>
-          </receiver>
-          <service android:enabled="true" android:exported="false" android:name="com.google.android.gms.analytics.AnalyticsService" />
-          <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver" android:exported="true">
-               <intent-filter>
-                   <action android:name="com.android.vending.INSTALL_REFERRER" />
-               </intent-filter>
-           </receiver>
-           <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
-        </config-file>
         <source-file src="src/android/CDVTagManager.java" target-dir="src/com/jareddickson/cordova/tagmanager"/>
-        <source-file src="src/android/google-play-services.jar" target-dir="libs" />
+        <source-file src="src/android/libGoogleAnalyticsServices.jar" target-dir="libs" />
     </platform>
     <platform name="ios">
         <config-file parent="/*" target="config.xml">

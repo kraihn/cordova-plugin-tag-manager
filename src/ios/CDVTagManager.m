@@ -73,12 +73,33 @@
     NSString        *category = [command.arguments objectAtIndex:0];
     NSString        *eventAction = [command.arguments objectAtIndex:1];
     NSString        *eventLabel = [command.arguments objectAtIndex:2];
-    NSNumber        *eventValue = [NSNumber numberWithInt:[[command.arguments objectAtIndex:3] intValue]];
+    NSNumber *eventValue = @0;
+    id valueObject = [command.arguments objectAtIndex:3];
+    if (![valueObject isEqual:[NSNull null]])
+    {
+        eventValue = [NSNumber numberWithInt:[valueObject intValue]];
+    }
 
     if (inited)
     {
         TAGDataLayer *dataLayer = [TAGManager instance].dataLayer;
         [dataLayer push:@{@"event":@"interaction", @"target":category, @"action":eventAction, @"target-properties":eventLabel, @"value":eventValue}];
+        [self successWithMessage:@"trackEvent" toID:callbackId];
+    }
+    else
+        [self failWithMessage:@"trackEvent failed - not initialized" toID:callbackId withError:nil];
+}
+
+- (void) pushEvent:(CDVInvokedUrlCommand*)command
+{
+    NSString        *callbackId = command.callbackId;
+    NSDictionary    *eventData = [command.arguments objectAtIndex:0];
+
+    if (inited)
+    {
+        TAGDataLayer *dataLayer = [TAGManager instance].dataLayer;
+        [dataLayer push:eventData];
+        [self successWithMessage:@"pushEvent" toID:callbackId];
     }
     else
         [self failWithMessage:@"trackEvent failed - not initialized" toID:callbackId withError:nil];
@@ -131,7 +152,6 @@
     CDVPluginResult *commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:message];
 
     [self.commandDelegate sendPluginResult:commandResult callbackId:callbackID];
-    // [self writeJavascript:[commandResult toSuccessCallbackString:callbackID]];
 }
 
 -(void) failWithMessage:(NSString *)message toID:(NSString *)callbackID withError:(NSError *)error
@@ -140,7 +160,6 @@
     CDVPluginResult *commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorMessage];
 
     [self.commandDelegate sendPluginResult:commandResult callbackId:callbackID];
-    // [self writeJavascript:[commandResult toErrorCallbackString:callbackID]];
 }
 
 -(void)dealloc

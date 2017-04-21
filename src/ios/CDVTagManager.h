@@ -43,6 +43,7 @@
 - (void) exitGTM:(CDVInvokedUrlCommand*)command;
 - (void) trackEvent:(CDVInvokedUrlCommand*)command;
 - (void) trackCustomEvent:(CDVInvokedUrlCommand*)command;
+- (void) pushEvent:(CDVInvokedUrlCommand*)command;
 - (void) trackPage:(CDVInvokedUrlCommand*)command;
 - (void) dispatch:(CDVInvokedUrlCommand*)command;
 
