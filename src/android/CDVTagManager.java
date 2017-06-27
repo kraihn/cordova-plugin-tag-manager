@@ -88,6 +88,7 @@ public class CDVTagManager extends CordovaPlugin {
         } else if (action.equals("exitGTM")) {
             try {
                 inited = false;
+                mContainer.close();
                 callback.success("exitGTM");
                 return true;
             } catch (final Exception e) {
