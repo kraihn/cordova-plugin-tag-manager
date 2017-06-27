@@ -88,6 +88,7 @@ public class CDVTagManager extends CordovaPlugin {
         } else if (action.equals("exitGTM")) {
             try {
                 inited = false;
+                mContainer.close();
                 callback.success("exitGTM");
                 return true;
             } catch (final Exception e) {
@@ -110,6 +111,19 @@ public class CDVTagManager extends CordovaPlugin {
                 }
             } else {
                 callback.error("trackEvent failed - not initialized");
+            }
+        } else if (action.equals("trackCustomEvent")) {
+            if (inited) {
+                try {
+                    DataLayer dataLayer = TagManager.getInstance(this.cordova.getActivity().getApplicationContext()).getDataLayer();
+                    dataLayer.push(DataLayer.mapOf("event", args.getString(0), args.getString(1), args.getString(2)));
+                    callback.success("trackCustomEvent - event = " + args.getString(0) + "; label = " + args.getString(1) + "; value = " + args.getString(2));
+                    return true;
+                } catch (final Exception e) {
+                    callback.error(e.getMessage());
+                }
+            } else {
+                callback.error("trackCustomEvent failed - not initialized");
             }
         } else if (action.equals("pushEvent")) {
             if (inited) {

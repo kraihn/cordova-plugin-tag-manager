@@ -105,6 +105,22 @@
         [self failWithMessage:@"trackEvent failed - not initialized" toID:callbackId withError:nil];
 }
 
+- (void) trackCustomEvent:(CDVInvokedUrlCommand*)command
+{
+    NSString        *callbackId = command.callbackId;
+    NSString        *eventAction = [command.arguments objectAtIndex:0];
+    NSString        *eventLabel = [command.arguments objectAtIndex:1];
+    NSString        *eventValue = [command.arguments objectAtIndex:2];
+
+    if (inited)
+    {
+        TAGDataLayer *dataLayer = [TAGManager instance].dataLayer;
+        [dataLayer push:@{@"event":eventAction, eventLabel:eventValue}];
+    }
+    else
+        [self failWithMessage:@"trackCustomEvent failed - not initialized" toID:callbackId withError:nil];
+}
+
 - (void) trackPage:(CDVInvokedUrlCommand*)command
 {
     NSString            *callbackId = command.callbackId;
